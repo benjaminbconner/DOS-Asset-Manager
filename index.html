@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>DOS Asset Manager</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="bar">
+    <div class="title">C:\IT\ASSETS\_</div>
+    <nav class="menu">
+      <button data-view="dashboard" class="btn">Dashboard</button>
+      <button data-view="assets" class="btn">Assets</button>
+      <button data-view="add" class="btn">Add</button>
+      <button data-view="cmd" class="btn">Command</button>
+      <button data-view="settings" class="btn">Settings</button>
+    </nav>
+  </header>
+
+  <main id="view">
+    <section id="dashboard" class="panel visible" aria-label="Dashboard">
+      <div class="panel-title">SYSTEM OVERVIEW</div>
+      <div class="grid">
+        <div class="card"><div class="card-title">TOTAL</div><div id="stat-total" class="card-value">0</div></div>
+        <div class="card"><div class="card-title">ACTIVE</div><div id="stat-active" class="card-value">0</div></div>
+        <div class="card"><div class="card-title">REPAIR</div><div id="stat-repair" class="card-value">0</div></div>
+        <div class="card"><div class="card-title">RETIRED</div><div id="stat-retired" class="card-value">0</div></div>
+      </div>
+      <div class="panel-subtitle">RECENT CHANGES</div>
+      <ul id="recent" class="list"></ul>
+      <div class="hint">Tip: Press F1 for help, F2 to toggle theme, or type "help" in Command.</div>
+    </section>
+
+    <section id="assets" class="panel" aria-label="Assets">
+      <div class="panel-title">ASSET LIST</div>
+      <div class="filters">
+        <input id="q" placeholder="search: owner=alice status=active model=dell" />
+        <select id="status">
+          <option value="">status: any</option>
+          <option>active</option><option>repair</option><option>retired</option><option>lost</option>
+        </select>
+        <select id="type">
+          <option value="">type: any</option>
+          <option>laptop</option><option>desktop</option><option>server</option><option>peripheral</option>
+        </select>
+        <button id="clearFilters" class="btn">Clear</button>
+        <button id="exportCsv" class="btn">Export CSV</button>
+      </div>
+      <table class="table" aria-label="Assets table">
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="selectAll" aria-label="select all"></th>
+            <th>TAG</th><th>TYPE</th><th>MODEL</th><th>SERIAL</th><th>OWNER</th><th>LOCATION</th><th>STATUS</th><th>PURCHASE</th><th>ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody id="assetRows"></tbody>
+      </table>
+      <div class="batch">
+        <button id="batchRetire" class="btn">Retire selected</button>
+        <button id="batchAssign" class="btn">Reassign selected</button>
+      </div>
+    </section>
+
+    <section id="add" class="panel" aria-label="Add asset">
+      <div class="panel-title">ADD ASSET</div>
+      <form id="addForm" class="form">
+        <div class="form-row"><label>Tag</label><input name="tag" required /></div>
+        <div class="form-row"><label>Type</label>
+          <select name="type" required>
+            <option>laptop</option><option>desktop</option><option>server</option><option>peripheral</option>
+          </select>
+        </div>
+        <div class="form-row"><label>Model</label><input name="model" required /></div>
+        <div class="form-row"><label>Serial</label><input name="serial" required /></div>
+        <div class="form-row"><label>Owner</label><input name="owner" /></div>
+        <div class="form-row"><label>Location</label><input name="location" /></div>
+        <div class="form-row"><label>Status</label>
+          <select name="status" required>
+            <option>active</option><option>repair</option><option>retired</option><option>lost</option>
+          </select>
+        </div>
+        <div class="form-row"><label>Purchase date</label><input name="purchaseDate" type="date" /></div>
+        <div class="form-row"><label>Notes</label><textarea name="notes" rows="3"></textarea></div>
+        <div class="form-actions">
+          <button type="submit" class="btn">Save</button>
+          <button type="reset" class="btn">Reset</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="cmd" class="panel" aria-label="Command">
+      <div class="panel-title">COMMAND PROMPT</div>
+      <div class="crt">
+        <div id="terminal" class="terminal" role="log" aria-live="polite"></div>
+        <div class="prompt">
+          <span class="path">C:\IT\ASSETS></span>
+          <input id="cmdInput" autocomplete="off" spellcheck="false" aria-label="command input" />
+        </div>
+      </div>
+      <div class="hint">Try: help | list | add tag=PC-100 type=desktop model=OptiPlex owner=alice | search owner=alice status=active</div>
+    </section>
+
+    <section id="settings" class="panel" aria-label="Settings">
+      <div class="panel-title">SETTINGS</div>
+      <div class="form-row"><label>Theme</label>
+        <select id="theme">
+          <option value="green">Green CRT</option>
+          <option value="amber">Amber CRT</option>
+          <option value="mono">Monochrome</option>
+        </select>
+      </div>
+      <div class="form-row"><label>Data</label>
+        <div class="settings-actions">
+          <button id="importJson" class="btn">Import JSON</button>
+          <button id="exportJson" class="btn">Export JSON</button>
+          <button id="wipeData" class="btn danger">Wipe (demo)</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bar footer">
+    <div>F1 Help | F2 Theme | F3 Export | ESC Cancel | © IT Dept</div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
